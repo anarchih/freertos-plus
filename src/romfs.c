@@ -100,8 +100,43 @@ static int romfs_open(void * opaque, const char * path, int flags, int mode) {
     }
     return r;
 }
+static int romfs_list(void * opaque, char*** files) {
+    //const char * meta;
+    char * meta = opaque;
+    int amounts = 1;
+   /* for (meta = opaque; get_unaligned(meta) && get_unaligned(meta + 8); meta += get_unaligned(meta + 4) + get_unaligned(meta + 8) + 12)
+    {
+        
+        amounts++;    
+    }
+    int i=0; 
+    files = pvPortMalloc(sizeof(char**)*amounts);
+    for (meta = opaque; get_unaligned(meta) && get_unaligned(meta + 8); meta += get_unaligned(meta + 4) + get_unaligned(meta + 8) + 12)
+    {
+        (*files)[i] = pvPortMalloc(sizeof(char) * get_unaligned(meta + 4)+1);
+      //  (*files)[i] = 
+    }*/
+    
+    *(files)[0] = meta + 12;
+    //(*files)[1] = meta + 24 + get_unaligned(meta + 4) + get_unaligned(meta + 8);
+   /* char** ptr = pvPortMalloc(sizeof(char)*3);
+    char* inptr= pvPortMalloc(sizeof(char)*3);
+    char* inptr2= pvPortMalloc(sizeof(char)*3);
+    
+    inptr = "ab";
+    inptr2 = "cd";
+    //inptr[1] = 'b';
+    //inptr[2] = '\0';
+    
+    (*files) = ptr;
+    (*files)[0] = inptr;
+    (*files)[1] = inptr2;
+    */
+    
+    return amounts;
 
+}
 void register_romfs(const char * mountpoint, const uint8_t * romfs) {
 //    DBGOUT("Registering romfs `%s' @ %p\r\n", mountpoint, romfs);
-    register_fs(mountpoint, romfs_open, (void *) romfs);
+    register_fs(mountpoint, romfs_open, romfs_list, (void *) romfs);
 }

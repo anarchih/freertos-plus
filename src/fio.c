@@ -196,7 +196,24 @@ void fio_set_opaque(int fd, void * opaque) {
     if (fio_is_open_int(fd))
         fio_fds[fd].opaque = opaque;
 }
+int fio_list(const char* mountpoint, char*** files){
+    int amounts = 0;
+    //char** ptr = pvPortMalloc(sizeof(char)*3);
+    //char* inptr= pvPortMalloc(sizeof(char)*3);
+    //char* inptr2= pvPortMalloc(sizeof(char)*3);
+    
+    //inptr = "ab";
+    //inptr2 = "cd";
+    //inptr[1] = 'b';
+    //inptr[2] = '\0';
+    
+    //(*files) = ptr;
+    //(*files)[0] = inptr;
+    //(*files)[1] = inptr2;
+    amounts = fs_list(mountpoint, files);
+    return amounts;
 
+}
 #define stdin_hash 0x0BA00421
 #define stdout_hash 0x7FA08308
 #define stderr_hash 0x7FA058A3
@@ -223,8 +240,10 @@ static int devfs_open(void * opaque, const char * path, int flags, int mode) {
     }
     return -1;
 }
-
+/*static int devfs_list(char* opaque, char*** files){
+    return 0;
+}*/
 void register_devfs() {
     DBGOUT("Registering devfs.\r\n");
-    register_fs("dev", devfs_open, NULL);
+    register_fs("dev", devfs_open, NULL, NULL);
 }
