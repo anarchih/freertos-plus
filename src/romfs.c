@@ -102,36 +102,21 @@ static int romfs_open(void * opaque, const char * path, int flags, int mode) {
 }
 static int romfs_list(void * opaque, char*** files) {
     //const char * meta;
-    char * meta = opaque;
-    int amounts = 1;
-   /* for (meta = opaque; get_unaligned(meta) && get_unaligned(meta + 8); meta += get_unaligned(meta + 4) + get_unaligned(meta + 8) + 12)
+    const uint8_t* meta = opaque;
+    int amounts = 0;
+    for (meta = opaque; get_unaligned(meta) && get_unaligned(meta + 8); meta += get_unaligned(meta + 4) + get_unaligned(meta + 8) + 12)
     {
         
         amounts++;    
     }
     int i=0; 
-    files = pvPortMalloc(sizeof(char**)*amounts);
+    (*files) = (char**)pvPortMalloc(sizeof(char*)*amounts);
     for (meta = opaque; get_unaligned(meta) && get_unaligned(meta + 8); meta += get_unaligned(meta + 4) + get_unaligned(meta + 8) + 12)
     {
-        (*files)[i] = pvPortMalloc(sizeof(char) * get_unaligned(meta + 4)+1);
-      //  (*files)[i] = 
-    }*/
-    
-    *(files)[0] = meta + 12;
-    //(*files)[1] = meta + 24 + get_unaligned(meta + 4) + get_unaligned(meta + 8);
-   /* char** ptr = pvPortMalloc(sizeof(char)*3);
-    char* inptr= pvPortMalloc(sizeof(char)*3);
-    char* inptr2= pvPortMalloc(sizeof(char)*3);
-    
-    inptr = "ab";
-    inptr2 = "cd";
-    //inptr[1] = 'b';
-    //inptr[2] = '\0';
-    
-    (*files) = ptr;
-    (*files)[0] = inptr;
-    (*files)[1] = inptr2;
-    */
+        (*files)[i] = pvPortMalloc(sizeof(char) * get_unaligned(meta + 4));
+        strncpy((*files)[i], (char*)meta+12, get_unaligned(meta+4));
+        i++;
+    }
     
     return amounts;
 

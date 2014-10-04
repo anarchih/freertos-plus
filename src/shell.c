@@ -66,8 +66,9 @@ void ls_command(int n, char *argv[]){
         fio_printf(1, "\r\n");
     else{
     }
-    fio_printf(1, "%s\n\r", (*files)[0]);
-    fio_printf(1, "%s", (*files)[1]);
+    for (int i=0; i<x; i++)
+        fio_printf(1, "%s\n\r", (*files)[i]);
+    //fio_printf(1, "%s", (*files)[1]);
    // fio_printf(1, "%s", files[0][1]);
     fio_printf(1, "%d", x);
     for (int i=0; i<x; i++){}

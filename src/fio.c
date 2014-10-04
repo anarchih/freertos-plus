@@ -210,7 +210,9 @@ int fio_list(const char* mountpoint, char*** files){
     //(*files) = ptr;
     //(*files)[0] = inptr;
     //(*files)[1] = inptr2;
+    xSemaphoreTake(fio_sem, portMAX_DELAY);
     amounts = fs_list(mountpoint, files);
+    xSemaphoreGive(fio_sem);
     return amounts;
 
 }
