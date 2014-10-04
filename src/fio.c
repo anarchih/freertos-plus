@@ -196,7 +196,7 @@ void fio_set_opaque(int fd, void * opaque) {
     if (fio_is_open_int(fd))
         fio_fds[fd].opaque = opaque;
 }
-int fio_list(const char* mountpoint, char*** files){
+int fio_list(const char* mountpoint, char *files[]){
     int amounts = 0;
     //char** ptr = pvPortMalloc(sizeof(char)*3);
     //char* inptr= pvPortMalloc(sizeof(char)*3);

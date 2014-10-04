@@ -100,21 +100,22 @@ static int romfs_open(void * opaque, const char * path, int flags, int mode) {
     }
     return r;
 }
-static int romfs_list(void * opaque, char*** files) {
+static int romfs_list(void * opaque, char *files[]) {
     //const char * meta;
     const uint8_t* meta = opaque;
     int amounts = 0;
+
     for (meta = opaque; get_unaligned(meta) && get_unaligned(meta + 8); meta += get_unaligned(meta + 4) + get_unaligned(meta + 8) + 12)
     {
         
         amounts++;    
     }
     int i=0; 
-    (*files) = (char**)pvPortMalloc(sizeof(char*)*amounts);
     for (meta = opaque; get_unaligned(meta) && get_unaligned(meta + 8); meta += get_unaligned(meta + 4) + get_unaligned(meta + 8) + 12)
     {
-        (*files)[i] = pvPortMalloc(sizeof(char) * get_unaligned(meta + 4));
-        strncpy((*files)[i], (char*)meta+12, get_unaligned(meta+4));
+        files[i] = (char*) meta + 12;
+        //(*files)[i] = pvPortMalloc(sizeof(char) * get_unaligned(meta + 4));
+        //strncpy((*files)[i], (char*)meta+12, get_unaligned(meta+4));
         i++;
     }
     

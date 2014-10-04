@@ -63,7 +63,7 @@ int fs_open(const char * path, int flags, int mode) {
     return -2;
 }
 
-int fs_list(const char * path, char*** files) {
+int fs_list(const char * path, char *files[]) {
     const char * slash;
     uint32_t hash;
     int i;
