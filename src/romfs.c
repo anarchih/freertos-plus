@@ -68,12 +68,14 @@ static off_t romfs_seek(void * opaque, off_t offset, int whence) {
 const uint8_t * romfs_get_file_by_hash(const uint8_t * romfs, uint32_t h, uint32_t * len) {
     const uint8_t * meta;
 
-    for (meta = romfs; get_unaligned(meta) && get_unaligned(meta + 4); meta += get_unaligned(meta + 4) + 8) {
+    for (meta = romfs; get_unaligned(meta) && get_unaligned(meta + 8); meta += get_unaligned(meta + 4) + get_unaligned(meta + 8) + 12)
+    {
+        
         if (get_unaligned(meta) == h) {
             if (len) {
-                *len = get_unaligned(meta + 4);
+                *len = get_unaligned(meta + 8);
             }
-            return meta + 8;
+            return meta + 12;
         }
     }
 
@@ -87,7 +89,7 @@ static int romfs_open(void * opaque, const char * path, int flags, int mode) {
     int r = -1;
 
     file = romfs_get_file_by_hash(romfs, h, NULL);
-
+   
     if (file) {
         r = fio_open(romfs_read, NULL, romfs_seek, NULL, NULL);
         if (r > 0) {

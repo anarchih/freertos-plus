@@ -59,10 +59,19 @@ void processdir(DIR * dirp, const char * curpath, FILE * outfile, const char * p
                 perror("opening input file");
                 exit(-1);
             }
+            
             b = (hash >>  0) & 0xff; fwrite(&b, 1, 1, outfile);
             b = (hash >>  8) & 0xff; fwrite(&b, 1, 1, outfile);
             b = (hash >> 16) & 0xff; fwrite(&b, 1, 1, outfile);
             b = (hash >> 24) & 0xff; fwrite(&b, 1, 1, outfile);
+
+            uint32_t filename_size = strlen(ent->d_name) + 1; 
+            b = (filename_size >>  0) & 0xff; fwrite(&b, 1, 1, outfile);
+            b = (filename_size >>  8) & 0xff; fwrite(&b, 1, 1, outfile);
+            b = (filename_size >> 16) & 0xff; fwrite(&b, 1, 1, outfile);
+            b = (filename_size >> 24) & 0xff; fwrite(&b, 1, 1, outfile);
+
+
             fseek(infile, 0, SEEK_END);
             size = ftell(infile);
             fseek(infile, 0, SEEK_SET);
@@ -70,6 +79,9 @@ void processdir(DIR * dirp, const char * curpath, FILE * outfile, const char * p
             b = (size >>  8) & 0xff; fwrite(&b, 1, 1, outfile);
             b = (size >> 16) & 0xff; fwrite(&b, 1, 1, outfile);
             b = (size >> 24) & 0xff; fwrite(&b, 1, 1, outfile);
+            
+            fwrite(ent->d_name, 1, filename_size, outfile);
+            
             while (size) {
                 w = size > 16 * 1024 ? 16 * 1024 : size;
                 fread(buf, 1, w, infile);
