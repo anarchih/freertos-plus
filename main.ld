@@ -15,9 +15,9 @@ SECTIONS
  		*(.text.*)
 		*(.rodata)
 		_sromfs = .;
-                *(.rom.*)
-		_eromfs = .;
-		_sidata = .;
+                *(.romfs*)
+	    _eromfs = .;	
+        _sidata = .;
 	} >FLASH
 
 	/* Initialized data will initially be loaded in FLASH at the end of the .text section. */
