@@ -1,6 +1,8 @@
 file build/main.elf
 target remote :3333
 
-b main
 
+b command_prompt
+c
+p help_command(0,1)
 c
