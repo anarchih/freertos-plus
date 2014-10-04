@@ -60,7 +60,6 @@ int parse_command(char *str, char *argv[]){
 }
 
 void ls_command(int n, char *argv[]){
-
 }
 
 int filedump(const char *filename){
@@ -68,7 +67,7 @@ int filedump(const char *filename){
 
 	int fd=fs_open(filename, 0, O_RDONLY);
 
-	if(fd==OPENFAIL)
+	if(fd==OPENFAIL||fd==-2)
 		return 0;
 
 	fio_printf(1, "\r\n");
@@ -77,7 +76,7 @@ int filedump(const char *filename){
 	while((count=fio_read(fd, buf, sizeof(buf)))>0){
 		fio_write(1, buf, count);
 	}
-
+    
 	fio_close(fd);
 	return 1;
 }
@@ -145,10 +144,12 @@ void test_command(int n, char *argv[]) {
     int error;
 
     fio_printf(1, "\r\n");
-
+    
+    host_action(SYS_SYSTEM, "mkdir output");
     handle = host_action(SYS_OPEN, "output/syslog", 8);
+    
     if(handle == -1) {
-        fio_printf(1, "Open file error!\n\r");
+        fio_printf(1, "Open file error!");
         return;
     }
 
@@ -159,7 +160,9 @@ void test_command(int n, char *argv[]) {
         host_action(SYS_CLOSE, handle);
         return;
     }
+    
 
+    
     host_action(SYS_CLOSE, handle);
 }
 
