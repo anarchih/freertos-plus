@@ -198,18 +198,6 @@ void fio_set_opaque(int fd, void * opaque) {
 }
 int fio_list(const char* mountpoint, char *files[]){
     int amounts = 0;
-    //char** ptr = pvPortMalloc(sizeof(char)*3);
-    //char* inptr= pvPortMalloc(sizeof(char)*3);
-    //char* inptr2= pvPortMalloc(sizeof(char)*3);
-    
-    //inptr = "ab";
-    //inptr2 = "cd";
-    //inptr[1] = 'b';
-    //inptr[2] = '\0';
-    
-    //(*files) = ptr;
-    //(*files)[0] = inptr;
-    //(*files)[1] = inptr2;
     xSemaphoreTake(fio_sem, portMAX_DELAY);
     amounts = fs_list(mountpoint, files);
     xSemaphoreGive(fio_sem);

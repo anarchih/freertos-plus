@@ -3,6 +3,12 @@ target remote :3333
 
 
 b command_prompt
+
 c
-p help_command(0,1)
+
+p help_command(0,NULL)
+
 c
+
+
+

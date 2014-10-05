@@ -62,14 +62,17 @@ int parse_command(char *str, char *argv[]){
 void ls_command(int n, char *argv[]){
     char *files[MAX_FDS] = {0};
     int x = fio_list(argv[1], files);
-    if (n==1)
+    if (n==1){
         fio_printf(1, "\r\n");
-    else{
     }
-    fio_printf(1, "\r\n");
-    for (int i=0; i<x; i++)
-        fio_printf(1, "%s\t", files[i]);
-    fio_printf(1, "\r\n");
+    else{
+    
+        fio_printf(1, "\r\n");
+        for (int i=0; i<x; i++)
+            fio_printf(1, "%s\t", files[i]);
+        fio_printf(1, "\r\n");
+        fio_printf(1, "%d", x);
+    }
 }
 
 int filedump(const char *filename){
